@@ -1,0 +1,4 @@
+db.driver=com.oracle.Driver
+db.url=host:1521:sid
+db.username=scott
+db.password=tiger

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <!-- Scenario covered
+    In all the below scenarios the Parent side is always set as 'abstract' in the 
+    bean definition
+    	* 1. Abstract class <- Non-subclass child + same properties + extra property
+    	* 2. Abstract class <- subclass child + extra property
+    	* 3. Parent class <- Non-subclass child + same properties + extra property
+    	* 4. Parent class <- subclass child + extra property
+    	* 5. Parent class <- Non-subclass child + one less property	// Valid non-working test case
+    	* 6. Non-class abstract bean def <- Concrete class + same properties + extra property
+    	* 7. Parent class <- non-class bean def + extra property
+     -->
+    
+    <!-- Scenario 1 -->
+    
+    <bean id="s1ParentBean" class="org.study.spring.core.appCtx.beaninherit.S1AbstractParent" abstract="true">
+    	<property name="prop1" value="val1"/>
+    	<property name="prop2" value="val2"/>
+    </bean>
+    
+    <bean id="s1ChildBean" class="org.study.spring.core.appCtx.beaninherit.S1NoSubClassChild" 
+    	parent="s1ParentBean">
+    	<property name="prop3" value="val3"/>
+    </bean>
+    
+    <!-- Scenario 2 -->
+    
+    <bean id="s2ChildBean" class="org.study.spring.core.appCtx.beaninherit.S2SubClassChild"
+    	parent="s1ParentBean">
+    	<property name="prop4" value = "val4"/>
+    </bean>
+    
+    <!-- Scenario 5 : Valid non-working scenario -->
+    
+    <!-- <bean id="s5ChildBean" class="org.study.spring.core.appCtx.beaninherit.S5NoSubClassChild"
+    	parent="s1ParentBean">
+    </bean> -->
+    
+    <!-- Scenario 3 -->
+    <bean id="s3ParentBean" class="org.study.spring.core.appCtx.beaninherit.S3Parent" abstract="true">
+    	<property name="prop1" value="val1"></property>
+    	<property name="prop2" value="val2"></property>
+    </bean>
+    
+    <bean id="s3ChildBean" class="org.study.spring.core.appCtx.beaninherit.S3NonSubClassChild"
+    	parent="s3ParentBean">
+    	<property name="prop4" value="val4"></property>
+    </bean>
+
+	<!-- Scenario 6 -->    
+    <bean id="s6AbstractParentBean" abstract="true">
+    	<property name="prop1" value="valA"></property>
+    	<property name="prop2" value="valB"></property>
+    </bean>
+    
+    <bean id="s6ChildBean" class="org.study.spring.core.appCtx.beaninherit.S6Child" 
+    	parent="s6AbstractParentBean">
+    	<property name="prop3" value="valC"></property>
+    </bean>
+    
+    <!-- Scenario 7 -->
+    <bean id="s7ChildBean" parent="s3ParentBean">
+    	<property name="prop3" value="val3"></property>
+    </bean>
+    
+</beans>

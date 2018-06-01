@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!-- Using context:component-scan tag so that the @Lookup annotation is processed -->    
+    <context:component-scan base-package="org.study.spring.core"></context:component-scan>
+
+	<!-- Method injection using an explicit spring bean lookup for a prototype bean in the singleton bean.
+	The singleton bean implement ApplicationContextAware to receive the spring context -->    
+    <bean id="commandBean" class="org.study.spring.core.appCtx.methodInjn.Command" scope="prototype"></bean>
+    <bean id="procBean" class="org.study.spring.core.appCtx.methodInjn.CommandProcessor"></bean>
+    
+    <!-- Lookup method injection by spring overriding the abstract class and providing the prototype bean
+    lookup method implementation using cglib. The lookup-method should be 'public' or 'protected' -->
+    <bean id="abstractProcBean" class="org.study.spring.core.appCtx.methodInjn.AbstractLookupProcessor">
+    	<lookup-method name="getCommand" bean="commandBean"/>
+    </bean>
+    
+    <!-- Note: A method replacer class can be used to override a classes' method without inheriting it.
+    The method replacer class should implement 'MethodReplacer' interface and re-implement the method. Then,
+    declare the MethodReplacer class as a bean, and use it the "replaced-method" tag for the original bean 
+    (for which the replace has to be done), by specifying the 'replacer" attribute as the replacer bean.
+    E.g., -->
+    
+    <!-- <bean id="originalBean" class="x.y.z.BeanClass">
+    	<replaced-method name="methodA" replacer="replacerBean">
+    		<arg-type>String</arg-type>
+    	</replaced-method>
+    </bean>
+    <bean id="replacerBean" class="x.y.z.ReplacerBean"></bean> -->
+    
+</beans>

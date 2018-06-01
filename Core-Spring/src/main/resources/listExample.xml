@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <bean id="listInputBean" class="org.study.spring.core.appCtx.beans.ListInputBean">
+    	<constructor-arg>
+    		<props>
+    			<prop key="p1">v1</prop>
+    			<prop key="p2">v2</prop>
+    		</props>
+    	</constructor-arg>
+    	<constructor-arg>
+    		<list>
+    			<value>l1</value>
+    			<value>l2</value>
+    		</list>
+    	</constructor-arg>
+    	<constructor-arg ref="addrSet"></constructor-arg>
+    	<constructor-arg ref="keyMap"></constructor-arg>
+    </bean>
+    
+    <!-- The value of a props, list, set or map can be a 
+    bean, ref, idref, list, map, props, value or null -->
+    
+    <bean id="keyMap" class="java.util.HashMap">
+    	<constructor-arg>
+    		<map>
+    			<entry key="k1" value="value1"></entry>
+    		</map>
+    	</constructor-arg>
+    </bean>
+    
+    <bean id="addrSet" class="java.util.HashSet">
+    	<constructor-arg>
+    		<set>
+    			<value>s1</value>
+    			<value>s2</value>
+    		</set>
+    	</constructor-arg>
+    </bean>
+    
+    <!-- Note: No need to used 'class' attribute on the bean tag when using the 'parent' attribute -->
+    <!-- FIX: merge=true doesn't work as expected - Contents don't merge -->
+    <!-- The lazy-init attribute directs spring to create this bean only when accessed, not when the
+    container is initialized. Lazy initialization at the container level can be specified by setting the
+    attribute "default-lazy-init" as "true" in the "beans" tag -->
+    <bean id="mergedInputBean" parent="listInputBean" lazy-init="true">
+    	<property name="props">
+    		<props merge="true">
+    			<prop key="p1">v1</prop>
+    			<prop key="p3">v3</prop>
+    		</props>
+    	</property>
+    </bean>
+    
+</beans>

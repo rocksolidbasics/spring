@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <!-- The Lifecycle interface is only supported on top-level singleton beans. 
+    On any other component, the Lifecycle interface will remain undetected and hence ignored. 
+    Also, note that the extended SmartLifecycle interface provides integration with the application 
+    context's startup and shutdown phases -->
+    
+    <!-- Component scan to process the @PreConstruct and @PostDestroy annotations -->
+    <context:component-scan base-package="org.study.spring.core.appCtx.lifecycle"></context:component-scan>
+    
+    <bean id="lifecycleProcessor" class="org.springframework.context.support.DefaultLifecycleProcessor">
+    	<!-- Set timeout in milliseconds to wait before phase shutdown ends -->
+    	<property name="timeoutPerShutdownPhase" value="10000" />
+    </bean>
+    
+    <!-- Import of L2 Beans -->
+    <import resource="fragments/lifecycle_L2Beans.xml"/>
+    
+    <!-- Root bean definitions -->
+    <bean id="rootBean" class="org.study.spring.core.appCtx.lifecycle.RootBean">
+    	<constructor-arg ref="l1Bean"></constructor-arg>
+    	<constructor-arg ref="l2Bean"></constructor-arg>
+    	<constructor-arg ref="l3Bean"></constructor-arg>
+    	<constructor-arg ref="l4Bean"></constructor-arg>
+    </bean>
+    
+    <!-- L1 Bean definitions -->
+    <bean id="l1Bean" class="org.study.spring.core.appCtx.lifecycle.L1Bean" init-method="customInit"></bean>
+    
+    <!-- L3 Bean definition -->
+    <bean id="l3Bean" class="org.study.spring.core.appCtx.lifecycle.L3Bean">
+    	<constructor-arg ref="l31Bean"></constructor-arg>
+    	<constructor-arg ref="l32Bean"></constructor-arg>
+    	<constructor-arg ref="l33Bean"></constructor-arg>
+    </bean>
+    
+    <!-- L4 Bean definition -->
+    <bean id="l4Bean" class="org.study.spring.core.appCtx.lifecycle.L4Bean"></bean>
+    
+    <!-- L3.1 Bean -->
+    <bean id="l31Bean" class="org.study.spring.core.appCtx.lifecycle.L3_1Bean">
+    	<constructor-arg ref="l311Bean"></constructor-arg>
+    </bean>
+    
+    <bean id="l311Bean" class="org.study.spring.core.appCtx.lifecycle.L3_1_1Bean"></bean>
+    
+    <!-- L3.2 Bean -->
+    <bean id="l32Bean" class="org.study.spring.core.appCtx.lifecycle.L3_2Bean">
+    	<constructor-arg ref="l321Bean"></constructor-arg>
+    	<constructor-arg ref="l322Bean"></constructor-arg>
+    </bean>
+    
+    <bean id="l321Bean" class="org.study.spring.core.appCtx.lifecycle.L3_2_1Bean"></bean>
+    <bean id="l322Bean" class="org.study.spring.core.appCtx.lifecycle.L3_2_2Bean"></bean>
+    
+    <!-- L3.3 Bean -->
+    <bean id="l33Bean" class="org.study.spring.core.appCtx.lifecycle.L3_3Bean">
+    	<constructor-arg ref="l331Bean"></constructor-arg>
+    </bean>
+    
+    <bean id="l331Bean" class="org.study.spring.core.appCtx.lifecycle.L3_3_1Bean"></bean>
+    
+</beans>

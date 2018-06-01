@@ -1,0 +1,4 @@
+ppc.driver=ppc.com.oracle.Driver
+ppc.url=ppc.host:1521:sid
+ppc.username=ppcscott
+ppc.password=ppctiger

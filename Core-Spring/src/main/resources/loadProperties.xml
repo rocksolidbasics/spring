@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <!-- Specifying properties for a bean via the 'p' namespace. See the namespace inclusion in the beans tag
+    above. Similarly, the 'c' namespace can be used to set the constructor-arg values as attrbutes to the bean
+    tag. The namespace inclusion is like:
+    xmlns:c="http://www.springframework.org/schema/c" -->
+    <bean id="datasource" class="org.study.spring.core.appCtx.beans.BasicDataSource" 
+    	p:driverClassName="com.sql.Driver"/>
+    	
+    <!-- Creating a Property object via the PropertyPlaceholderConfigurer class -->
+    <!--  In-place property definition method is not working. Properties not getting loaded -->
+    <!-- <bean id="propertyMap" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="properties">
+    		<value>
+    			driverClassName=com.mysql.Driver
+    			url=http://mysql:1205
+    			username=testUser
+    		</value>
+    	</property>
+    </bean> -->
+    
+    <!-- Create properties via the "context:property-placeholder" tag -->
+    <context:property-placeholder location="properties/db.props,properties/ppc.props"/>
+    
+    <!-- Create properties via the PropertyPlaceholderConfigurer -->
+    <!-- Commented out as multiple property file configurations doesn't work. All files
+    have to loaded by either the context-property tag or via the PPC class -->
+    <!-- <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="locations" value="classpath:properties/ppc.props"/>
+    </bean> -->
+    
+    <bean id="oraDS" class="org.study.spring.core.appCtx.beans.OracleDataSource">
+    	<property name="url" value="${ppc.url}"/>
+    	<property name="username" value="${db.username}"/>
+    	<property name="password" value="${db.password}"/>
+    </bean>
+    	
+    <bean id="mysqlDS" class="org.study.spring.core.appCtx.beans.MysqlDataSource"/>
+    
+</beans>

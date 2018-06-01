@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <import resource="fragments/productFrag.xml"/>
+    <import resource="/fragments/customerFrag.xml"/>
+    
+    <!--
+    	"id" is not of type XML schema xsd:ID type, instead it was moved to xsd:string (3.1 onwards) 
+    	and the uniquness of the values are taken care by spring code, instead of the XML parser ensuring
+    	the uniquness
+    -->
+    <bean id="order" name="orderAlias" class="org.study.spring.core.appCtx.beans.Order"></bean>
+    
+    <!-- Specifying beans defined as static Inner classes. Inner classes not defined as "static" will
+    throw error when initializing -->
+    <bean id="lineItem" class="org.study.spring.core.appCtx.beans.Order.LineItem"></bean>
+    <bean id="lineItemNew" class="org.study.spring.core.appCtx.beans.Order$LineItem"></bean>
+    
+    <!-- The name attribute of the 'alias' tag can be an 'id' or the 'name' of another bean, both works -->
+    <alias name="customer" alias="customerNewAlias" />
+    <alias name="customerAlias" alias="customerAliasAlias" />
+    
+    <!-- Bean instantiation by calling "static factory method"-->
+    <bean id="staticBeanFactory" class="org.study.spring.core.appCtx.delegatedBeanFactory.EntityFactory" factory-method="createInstance"/>
+    <!-- Bean instantiation using "instance factory method". The factory-bean can be any other object on
+    which a method, defined by the factory-method can be called -->
+    <bean id="factoryProd" factory-bean="staticBeanFactory" factory-method="getProductInstance"></bean>
+    
+    <!-- Constructor-based DI. The 'type' attribute of 'constructor-arg' tag can be used to disambiguate the
+    type in case the constructor has primitive types. The 'index' or 'name' attribute can be used to specify
+    the exact parameter on which the DI should be done. Note: The 'name' can be used only when the code is
+    compiled with debug flag, else the parameter names are not preserved. An alternative to this is to use
+    the @ConstructorProperties annotation to specify the parameter names. For e.g.,
+    @ConstructorProperties({"name", "sku"}). See example in Address bean's constructor
+    
+    Note: The constructor-arg can be used when using static/instance factory methods to pass in the method parameters
+    when calling the factory methods -->
+    
+    <bean id="prodA" class="org.study.spring.core.appCtx.beans.Product"/>
+    <bean id="ctrOrder" class="org.study.spring.core.appCtx.beans.Order">
+    	<constructor-arg ref="prodA"></constructor-arg>
+    </bean>
+    
+    <!-- Setter DI -->
+    <bean id="address" class="org.study.spring.core.appCtx.beans.Address">
+    	<constructor-arg name="street" type="java.lang.String" value="Street_1"/>
+    	<constructor-arg name="state" value="KA"/>
+    	<constructor-arg name="ctry" value="India"/>
+    </bean>
+    <!-- The "ref" can be subsituted with a "value" attribute or "idref" tag inside the property tag. The idref tag is 
+    preferred because the passed in value is validated at deployment time and hence fail-fast. Idref passes the string id
+    of the bean, not the reference (the reference is later provided after dereferencing) -->
+    <bean id="setOrder" class="org.study.spring.core.appCtx.beans.Order">
+    	<property name="address" ref="address"/>
+    	<!-- Setting a property to null -->
+    	<property name="customerName">
+    		<null/>
+    	</property>
+    </bean>
+    
+</beans>
