@@ -57,7 +57,7 @@
     
     <bean id="movieRecommenderB" class="org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanB"></bean>
     
-    <!-- ================== All type injection ==================== -->
+    <!-- ================== All types of injection ==================== -->
     <bean id="dramaMovie" class="org.study.spring.core.appCtx.postProc.autowired.MovieType">
     	<property name="type" value="drama"></property>
     </bean>
@@ -73,5 +73,93 @@
     	<property name="movieName" value="Inception"></property>
     	<property name="releaseDate" value="2-08-2012"></property>
     </bean>
-    <bean id="movieRecommenderC" class="org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanC"></bean>
+    <bean id="movieRecommenderC" class="org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanC">
+    </bean>
+    
+    <!-- ===================== @Primary Usage ==================== -->
+    <bean id="dramaMovieA" class="org.study.spring.core.appCtx.postProc.autowired.MovieType">
+    	<property name="type" value="drama"></property>
+    </bean>
+    <bean id="thrillerMovieA" class="org.study.spring.core.appCtx.postProc.autowired.MovieType">
+    	<property name="type" value="thriller"></property>
+    </bean>
+    <!-- Setting default movie type as the primary bean -->
+    <bean id="defaultMovieA" class="org.study.spring.core.appCtx.postProc.autowired.MovieType" primary="true">
+    	<property name="type" value="comedy"></property>
+    </bean>
+    <bean id="movieRecommenderD" class="org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanD">
+    </bean>
+    
+    <!-- ===================== @Qualifier ======================== -->
+    <bean id="billingAddress" class="org.study.spring.core.appCtx.postProc.autowired.Address">
+    	<property name="street" value="#32, 8th Cross"></property>
+    	<property name="state" value="KA"></property>
+    	<property name="country" value="IN"></property>
+    </bean>
+    <bean id="shippingAddress" class="org.study.spring.core.appCtx.postProc.autowired.Address">
+    	<qualifier value="shipQual"></qualifier>
+    	<property name="street" value="#135, RMZ Titanium"></property>
+    	<property name="state" value="KA"></property>
+    	<property name="country" value="IN"></property>
+    </bean>
+    <bean id="orderBean" class="org.study.spring.core.appCtx.postProc.autowired.Order">
+    	<property name="id" value="DKDKD90393"></property>
+    </bean>
+    
+    <!-- ===================== @Qualifier with lists ======================== -->
+    <bean id="matrixMovie" class="org.study.spring.core.appCtx.postProc.autowired.Movie">
+    	<constructor-arg name="name" value="Matrix"></constructor-arg>
+    	<constructor-arg name="year" value="2001"></constructor-arg>
+    	<constructor-arg name="lang" value="English"></constructor-arg>
+    	<qualifier value="thriller"></qualifier>
+    </bean>
+    <bean id="inceptionMovie" class="org.study.spring.core.appCtx.postProc.autowired.Movie">
+    	<constructor-arg name="name" value="Inception"></constructor-arg>
+    	<constructor-arg name="year" value="2012"></constructor-arg>
+    	<constructor-arg name="lang" value="English"></constructor-arg>
+    	<qualifier value="thriller"></qualifier>
+    </bean>
+    <!-- @Resource used to lookup this bean by its "name" attribute -->
+    <bean id="interstellarMovie" name="scifi" class="org.study.spring.core.appCtx.postProc.autowired.Movie">
+    	<constructor-arg name="name" value="Interstellar"></constructor-arg>
+    	<constructor-arg name="year" value="20015"></constructor-arg>
+    	<constructor-arg name="lang" value="English"></constructor-arg>
+    	<qualifier value="sci-fi"></qualifier>
+    </bean>
+    <!-- The name of the bean "comedy" will be matched with the MovieList.comedy attribute marked with
+    @Autowired and this bean will be injected. Spring does this in the absence of a @Primary or @Qualifier input.
+    The same will be applicable to a List marked with @Autowired and its variable name as "comedy" -->
+    <bean id="cableGuyMovie" name="comedy" class="org.study.spring.core.appCtx.postProc.autowired.Movie">
+    	<constructor-arg name="name" value="The Cable Guy"></constructor-arg>
+    	<constructor-arg name="year" value="1998"></constructor-arg>
+    	<constructor-arg name="lang" value="English"></constructor-arg>
+    	<qualifier value="comedy"></qualifier>
+    </bean>
+     <bean id="petDetectiveMovie" class="org.study.spring.core.appCtx.postProc.autowired.Movie">
+    	<constructor-arg name="name" value="Pet Detective"></constructor-arg>
+    	<constructor-arg name="year" value="1996"></constructor-arg>
+    	<constructor-arg name="lang" value="English"></constructor-arg>
+    	<qualifier value="comedy"></qualifier>
+    </bean>
+    
+    <bean id="movieList" class="org.study.spring.core.appCtx.postProc.autowired.MovieList"></bean>
+    
+    <!-- ============================ Custom qualifiers and meta usage ========================= -->
+    <bean id="billingAddrHome" class="org.study.spring.core.appCtx.postProc.autowired.Address">
+    	<qualifier type="AddressAnn">
+    		<attribute key="type" value="Billing"/>
+    		<attribute key="location" value="Home"/>
+    	</qualifier>
+    </bean>
+    <bean id="billingAddrOffice" class="org.study.spring.core.appCtx.postProc.autowired.Address">
+    	<qualifier type="AddressAnn">
+    		<attribute key="type" value="Billing"/>
+    		<attribute key="location" value="Office"/>
+    	</qualifier>
+    </bean>
+    <bean id="shippingAddrHome" class="org.study.spring.core.appCtx.postProc.autowired.Address">
+   		<meta key="type" value="Shipping"/>
+   		<meta key="location" value="Home"/>
+    </bean>
+    <bean id="orderQualMetaBean" class="org.study.spring.core.appCtx.postProc.autowired.OrderQualMeta"></bean>
 </beans>

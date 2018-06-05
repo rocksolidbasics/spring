@@ -8,9 +8,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.study.spring.core.appCtx.postProc.ReqTestBean;
 import org.study.spring.core.appCtx.postProc.TestBean1;
 import org.study.spring.core.appCtx.postProc.TestBean2;
+import org.study.spring.core.appCtx.postProc.autowired.MovieList;
 import org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanA;
 import org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanB;
 import org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanC;
+import org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanD;
+import org.study.spring.core.appCtx.postProc.autowired.Order;
+import org.study.spring.core.appCtx.postProc.autowired.OrderQualMeta;
 
 public class PostProcRunner {
 
@@ -24,6 +28,40 @@ public class PostProcRunner {
 		ppr.testRequiredAnnBeanPostProc();
 		ppr.testAutoWired();
 		ppr.testListAutowire();
+		ppr.testPrimaryAnn();
+		ppr.testQualifiers();
+		ppr.testListQualifiers();
+		ppr.testResource();
+		ppr.testCustomQualifiers();
+	}
+
+	private void testCustomQualifiers() {
+		OrderQualMeta orderMeta = (OrderQualMeta)ctx.getBean("orderQualMetaBean");
+		System.out.println("Billing home address set via custom qualifier => " + orderMeta.getBillingHomeAddress());
+		System.out.println("Shipping home address set via meta tag => " + orderMeta.getShippingHomeAddress());
+	}
+
+	private void testResource() {
+		MovieList mlist = (MovieList)ctx.getBean("movieList");
+		System.out.println("Movie injected using @Resource => " + mlist.getScifi());
+	}
+
+	private void testListQualifiers() {
+		MovieList mlist = (MovieList)ctx.getBean("movieList");
+		System.out.println("List of movies filtered via @Qualifier(\"thriller\") => " + mlist.getMovieList());
+		System.out.println("List of movies filtered by matching the injection point variable name with "
+				+ "the qualifier or the bean id => " + mlist.getComedy());
+	}
+
+	private void testQualifiers() {
+		Order order = (Order)ctx.getBean("orderBean");
+		System.out.println("Billing address resolved via bean id => " + order.getBillingAddress());
+		System.out.println("Shipping address resolved via qualifier tag value => " + order.getShippingAddress());
+	}
+
+	private void testPrimaryAnn() {
+		MovieRecommenderBeanD bd = (MovieRecommenderBeanD)ctx.getBean("movieRecommenderD");
+		System.out.println("Defaulted movie type => " + bd.getMovieType());
 	}
 
 	private void testListAutowire() {
@@ -32,6 +70,7 @@ public class PostProcRunner {
 		System.out.println("List of movie catalogs => " + mrb.getMoviCatalog());
 		System.out.println("Billing address => " + mrb.getCustomerPrefs().getBillingAddr());
 		System.out.println("Shipping address => " + mrb.getCustomerPrefs().getShippingAddr());
+		System.out.println("Application context injected type => " + mrb.getCtx().getClass().getName());
 	}
 
 	private void testAutoWired() {

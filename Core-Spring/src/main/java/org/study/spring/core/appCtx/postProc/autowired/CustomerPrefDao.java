@@ -47,7 +47,8 @@ public class CustomerPrefDao {
 	}
 	
 	/**
-	 * If the below autowire is enabled without an optional semantic then, it may throw the below exception
+	 * If the below autowire is enabled without an optional semantic (@Autowired(required = true), Optional,
+	 * @Nullable) then, it may throw the below exception:
 	 * org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 
 	 * 'org.study.spring.core.appCtx.beans.Address' available: expected at least 1 bean which qualifies as 
 	 * autowire candidate. Dependency annotations: {}
