@@ -10,7 +10,7 @@ public class Address {
 	
 	@ConstructorProperties({"street", "state", "ctry"})
 	public Address(String st, String state, String country) {
-		this.street = st;;
+		this.street = st;
 	}
 	
 	public String getStreet() {

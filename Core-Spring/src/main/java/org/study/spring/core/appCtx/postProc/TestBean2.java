@@ -1,6 +1,6 @@
 package org.study.spring.core.appCtx.postProc;
 
-public class TestBean2 {
+public class TestBean2 implements TestBeanValidationMarker {
 
 	private String prop3;
 	private String prop4;
@@ -16,6 +16,10 @@ public class TestBean2 {
 	}
 	public void setProp4(String prop4) {
 		this.prop4 = prop4;
+	}
+	
+	public void testAndFixProperty() {
+		System.out.println("Tested properties values on bean2 and fixed them");
 	}
 	
 }

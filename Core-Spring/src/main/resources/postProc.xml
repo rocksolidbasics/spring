@@ -7,9 +7,71 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
     
+    <!-- The 'annotation-config' implicity registers the below beans:
+    AutowiredAnnotationBeanPostProcessor, CommonAnnotationBeanPostProcessor,
+    PersistenceAnnotationBeanPostProcessor, RequiredAnnotationBeanPostProcessor -->
+    <context:annotation-config></context:annotation-config>
+
     <bean class="org.study.spring.core.appCtx.postProc.InstantiationTracingBeanPostProcessor"/>
+    <bean class="org.study.spring.core.appCtx.postProc.Order2BeanPostProcessor" />
     
     <bean class="org.study.spring.core.appCtx.postProc.TestBean1" id="testBean1"/>
     <bean class="org.study.spring.core.appCtx.postProc.TestBean2" id="testBean2"/>
     
+    <!-- Required annotation bean processing test -->
+    <bean id="reqTestBean" class="org.study.spring.core.appCtx.postProc.ReqTestBean">
+    	<property name="prop1" value="P1"></property>
+    	
+    	<!-- prop2 is annotated as @Required, hence if the below property is commented out the exception
+    	org.springframework.beans.factory.BeanInitializationException: 
+    	Property 'prop2' is required for bean 'reqTestBean' is thrown -->
+    	<property name="prop2" value="P2"></property>
+    </bean>
+    
+    <!-- Autowired annotation bean processing test -->
+    
+    <!-- Constructor, field, setter method, arbitrary method autowiring -->
+    
+    <!--=================== Auto constructor injecton ==========================-->
+    <bean id="customerPref" class="org.study.spring.core.appCtx.postProc.autowired.CustomerPrefDao">
+    	<property name="customerId" value="1"></property>
+    	<property name="movieCategory" value="Thriller"></property>
+    </bean>
+    
+    <!-- This bean has only one constructor accepting the CustomerPrefDao, hence no need to provide a
+    consturctor-args or an @Autowired, as Spring 4.3 onwards an auto injection may be done if the class
+    has only one constructor defined. If more than one, then an @Autowired is necessary -->
+    <bean id="movieRecommenderA" class="org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanA"></bean>
+    
+    <!--=================== Constructor injection ==========================-->
+    <!-- Using customerPref -->
+    <bean id="prevSelections" class="org.study.spring.core.appCtx.postProc.autowired.PrevSelectionBean">
+    	<property name="movieNames">
+    		<list>
+    			<value>Matrix</value>
+    			<value>Inception</value>
+    			<value>Interstellar</value>
+    		</list>
+    	</property>
+    </bean>
+    
+    <bean id="movieRecommenderB" class="org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanB"></bean>
+    
+    <!-- ================== All type injection ==================== -->
+    <bean id="dramaMovie" class="org.study.spring.core.appCtx.postProc.autowired.MovieType">
+    	<property name="type" value="drama"></property>
+    </bean>
+    <bean id="thrillerMovie" class="org.study.spring.core.appCtx.postProc.autowired.MovieType">
+    	<property name="type" value="thriller"></property>
+    </bean>
+    
+    <bean id="mov1" class="org.study.spring.core.appCtx.postProc.autowired.MovieCatalog">
+    	<property name="movieName" value="Matrix"></property>
+    	<property name="releaseDate" value="23-01-2001"></property>
+    </bean>
+    <bean id="mov2" class="org.study.spring.core.appCtx.postProc.autowired.MovieCatalog">
+    	<property name="movieName" value="Inception"></property>
+    	<property name="releaseDate" value="2-08-2012"></property>
+    </bean>
+    <bean id="movieRecommenderC" class="org.study.spring.core.appCtx.postProc.autowired.MovieRecommenderBeanC"></bean>
 </beans>
