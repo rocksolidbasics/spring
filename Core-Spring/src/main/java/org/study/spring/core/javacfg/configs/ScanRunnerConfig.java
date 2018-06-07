@@ -9,6 +9,10 @@ import org.study.spring.core.javacfg.beans.scannedB.BeanB;
 import org.study.spring.core.javacfg.beans.scannedC.BeanC;
 import org.study.spring.core.javacfg.beans.scannedC.CollaboratorC;
 
+/**
+ * > Bean component scan done from selected packages having @Component annotated beans
+ *
+ */
 @Configuration
 @ComponentScan(basePackages="org.study.spring.core.javacfg.beans.scannedA,org.study.spring.core.javacfg.beans.scannedB")
 public class ScanRunnerConfig {
@@ -23,7 +27,8 @@ public class ScanRunnerConfig {
 	}
 	
 	/**
-	 * Bean definition using the "name" attribute
+	 * Bean definition using the "name" attribute, can be denoted using the default value attribute
+	 * as @Bean("beanName1")
 	 * @return
 	 */
 	@Bean(name="beanName1")
@@ -33,7 +38,7 @@ public class ScanRunnerConfig {
 	
 	/**
 	 * > Below is equivalent to using @Bean("beanName2")
-	 * > Even though there are two method created for the same bean class,
+	 * > Even though there are two methods for the same bean class, beanName1 and beanName2, 
 	 * we will have two objects created. Each of these method calls will return
 	 * the same object, hence the singleton
 	 */

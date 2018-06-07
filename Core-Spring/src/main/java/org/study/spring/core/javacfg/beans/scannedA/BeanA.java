@@ -18,6 +18,8 @@ public class BeanA {
 	@Autowired
 	private CollaboratorA collabA;
 	
+	//This qualifier is the injection point qualifier which resolves to the name
+	//provided to the collaboratorB bean using the @Component("collabQual") annotation
 	@Qualifier("collabQual")
 	@Autowired
 	private CollaboratorB collabB;
