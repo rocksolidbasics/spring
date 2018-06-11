@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.study.spring.core.javacfg.beans.scannedA.BeanA;
 import org.study.spring.core.javacfg.beans.scannedB.BeanB;
+import org.study.spring.core.javacfg.beans.scannedB.BeanD;
 import org.study.spring.core.javacfg.beans.scannedC.BeanC;
 import org.study.spring.core.javacfg.beans.scannedC.CollaboratorC;
 
@@ -61,5 +62,10 @@ public class ScanRunnerConfig {
 	@Bean
 	public BeanC getBeanC2() {
 		return new BeanC();
+	}
+	
+	@Bean
+	public BeanD getBeanD() {
+		return new BeanD();
 	}
 }

@@ -4,6 +4,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.study.spring.core.javacfg.beans.scannedA.BeanA;
 import org.study.spring.core.javacfg.beans.scannedB.BeanB;
+import org.study.spring.core.javacfg.beans.scannedB.BeanD;
 import org.study.spring.core.javacfg.beans.scannedC.BeanC;
 import org.study.spring.core.javacfg.configs.ScanRunnerConfig;
 
@@ -22,6 +23,9 @@ public class SimpleScanRunner {
 	private void beanLoadingUsingQualifier() {
 		BeanC bc = (BeanC)ctx.getBean(BeanC.class);
 		System.out.println("Bean retrieved using the qualifier name => " + bc.getCollabC());
+		BeanD bd = (BeanD)ctx.getBean(BeanD.class);
+		System.out.println("Bean retrieved using qualifier used with @Component and at injection point => " +
+				bd.getCollabD());
 	}
 
 	private void beanLoadingWithName() {
