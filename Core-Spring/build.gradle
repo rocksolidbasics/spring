@@ -17,6 +17,10 @@ dependencies {
     
     api 'org.springframework:spring-context:5.0.6.RELEASE'
     //compile group: 'org.springframework', name: 'spring-beans', version: '5.0.6.RELEASE'
+    
+    //This is required in order to use the @Aspect annotations
+	compile group: 'org.springframework', name: 'spring-aspects', version: '5.0.6.RELEASE'
+    
 }
 
 
