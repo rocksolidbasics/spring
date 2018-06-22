@@ -10,7 +10,8 @@
 
 	<properties>
 		<springframework.version>5.0.6.RELEASE</springframework.version>
-		<!-- Lower version may throw error during Tomcat startup due to incompatibility with spring versions -->
+		<!-- Lower version may throw error during Tomcat startup due to incompatibility 
+			with spring versions -->
 		<jackson.library>2.9.4</jackson.library>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -46,11 +47,28 @@
 			<scope>provided</scope>	<!-- Otherwise tomcat may fail to start -->
 		</dependency>
 
-		<!-- For converting POJO classes to JSON and back -->
+		<!-- For converting POJO classes to JSON and back, specifically needed 
+			when coding for REST interfaces -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.library}</version>
+		</dependency>
+
+		<!-- The below dependency is needed when using XML based rest API -->
+		<!-- <dependency> <groupId>javax.xml.bind</groupId> <artifactId>jaxb-api</artifactId> 
+			<version>${jaxb-api.version}</version> <scope>runtime</scope> </dependency> -->
+
+		<!-- For spring security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${springframework.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -62,7 +80,7 @@
 				<version>2.2</version>
 				<configuration>
 					<port>8080</port>
-					<path>/spring5-webmvc-demo</path>
+					<path>/spring-rest</path>
 				</configuration>
 			</plugin>
 		</plugins>
