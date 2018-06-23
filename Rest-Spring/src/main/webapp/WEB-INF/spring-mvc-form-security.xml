@@ -1,0 +1,66 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans     
+   http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+   http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+	<context:component-scan base-package="org.study.spring.rest" />
+	<!-- Without this annotation, the json converters won't be registered, and hence the @RequestBody and
+	@ResponseBody annotations will fail to convert the POJO classes. The error message seen is:
+	org.springframework.http.converter.HttpMessageNotWritableException: 
+	No converter found for return value of type: class  -->
+	<mvc:annotation-driven/>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- Spring security configuration using form based authentication (Although not a useful
+		way to configure for REST services. The preferred one is Basic/ Digest authentication)-->
+	
+	<!--
+		Testing URLs: (//-//- is to escape the double-minus not allowed in XML comments)
+		> curl -i -X POST -d username=user -d password=userPass -c /opt/cookies.txt 
+			http://localhost:8080/spring-rest/login
+		> curl -i //-//-header "Accept:application/json" -X GET -b /opt/cookies.txt 
+			http://localhost:8080/spring-rest/mvcRest/1 
+	 -->
+	
+	<sec:http entry-point-ref="restAuthenticationEntryPoint">
+		<sec:intercept-url pattern="/mvcRest/**" access="ROLE_ADMIN"/>
+		<sec:form-login
+			authentication-success-handler-ref="mySuccessHandler"
+			authentication-failure-handler-ref="myFailureHandler" 
+		/>
+		
+		<sec:logout/>
+	</sec:http>
+	
+	<sec:authentication-manager alias="authenticationManager">
+		<sec:authentication-provider>
+			<sec:user-service>
+				<sec:user name="temporary" password="temp" authorities="ROLE_ADMIN"/>
+				<sec:user name="user" password="user" authorities="ROLE_ADMIN"/>
+			</sec:user-service>
+			
+			<!-- Mandatory tag, else password encoder missing exception is thrown. The valid values
+			for hash are - bcrypt, plaintext, sha, sha-256, md5, md4, {sha}, {ssha} -->
+			<sec:password-encoder ref="encoder"></sec:password-encoder>
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+	
+	<bean id="encoder" 
+    class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
+
+	<!-- Redefining the failure handler to change its behaviour from a redirect to no redirect,
+	as its not going to get the value of "defaultFailureUrl" -->
+	<bean id="myFailureHandler" class=
+     "org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
+</beans>

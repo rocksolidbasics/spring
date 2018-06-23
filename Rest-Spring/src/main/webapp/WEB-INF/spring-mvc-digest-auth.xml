@@ -1,0 +1,64 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans     
+   http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+   http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+	<context:component-scan base-package="org.study.spring.rest" />
+	<!-- Without this annotation, the json converters won't be registered, and hence the @RequestBody and
+	@ResponseBody annotations will fail to convert the POJO classes. The error message seen is:
+	org.springframework.http.converter.HttpMessageNotWritableException: 
+	No converter found for return value of type: class  -->
+	<mvc:annotation-driven/>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- Spring security configuration using Digest authentication)-->
+	
+	<sec:http create-session = "stateless">
+		<sec:intercept-url pattern="/mvcRest/**" access="ROLE_ADMIN"/>
+		<sec:http-basic/>
+		<sec:custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER"/>
+	</sec:http>
+	
+	<sec:authentication-manager alias="authenticationManager">
+		<sec:authentication-provider>
+			<sec:user-service id="userService">
+				<sec:user name="temporary" password="temp" authorities="ROLE_ADMIN"/>
+				<sec:user name="user" password="user" authorities="ROLE_ADMIN"/>
+			</sec:user-service>
+			
+			<!-- Mandatory tag, else password encoder missing exception is thrown. The valid values
+			for hash are - bcrypt, plaintext, sha, sha-256, md5, md4, {sha}, {ssha} -->
+			<sec:password-encoder ref="encoder"></sec:password-encoder>
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+	
+	<bean id="encoder" 
+    class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
+
+	<!-- Redefining the failure handler to change its behaviour from a redirect to no redirect,
+	as its not going to get the value of "defaultFailureUrl" -->
+	<bean id="myFailureHandler" class=
+     "org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
+     
+     <!-- Beans required for Digest authentication custom filter -->
+     <bean id="digestFilter" class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+     	<property name="userDetailsService" ref="userService"></property>
+     	<property name="authenticationEntryPoint" ref="digestEntryPoint"></property>
+     </bean>
+     
+     <bean id="digestEntryPoint" class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+     	<property name="realmName" value="Contacts Realm via Digest Authentication"></property>
+     	<property name="key" value="acegi"></property>
+     </bean>
+</beans>

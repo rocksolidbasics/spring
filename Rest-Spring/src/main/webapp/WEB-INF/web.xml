@@ -9,7 +9,14 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring-mvc.xml</param-value>
+			<!-- Enable this to have the form based security enabled for the REST application -->
+			<!-- <param-value>/WEB-INF/spring-mvc-form-security.xml</param-value> -->
+
+			<!-- Enable this to have the basic security enabled for the REST application -->
+			<!-- <param-value>/WEB-INF/spring-mvc-basic-auth.xml</param-value> -->
+			
+			<!-- Enable this to have the basic security enabled for the REST application -->
+			<param-value>/WEB-INF/spring-mvc-digest-auth.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

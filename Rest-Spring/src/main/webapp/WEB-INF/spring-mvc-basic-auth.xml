@@ -22,24 +22,11 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
-	<!-- Spring security configuration -->
+	<!-- Spring security configuration using Basic authentication)-->
 	
-	<!--
-		Testing URLs: (//-//- is to escape the double-minus not allowed in XML comments)
-		> curl -i -X POST -d username=user -d password=userPass -c /opt/cookies.txt 
-			http://localhost:8080/spring-rest/login
-		> curl -i //-//-header "Accept:application/json" -X GET -b /opt/cookies.txt 
-			http://localhost:8080/spring-rest/mvcRest/1 
-	 -->
-	
-	<sec:http entry-point-ref="restAuthenticationEntryPoint">
+	<sec:http create-session = "stateless">
 		<sec:intercept-url pattern="/mvcRest/**" access="ROLE_ADMIN"/>
-		<sec:form-login
-			authentication-success-handler-ref="mySuccessHandler"
-			authentication-failure-handler-ref="myFailureHandler" 
-		/>
-		
-		<sec:logout/>
+		<sec:http-basic/>
 	</sec:http>
 	
 	<sec:authentication-manager alias="authenticationManager">
