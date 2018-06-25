@@ -24,7 +24,7 @@ import org.study.spring.rest.service.ProductService;
  */
 @Controller
 @RequestMapping("/mvcRest")
-class MvcRestController {
+public class MvcRestController {
 
 	@Autowired
 	private ProductService service;

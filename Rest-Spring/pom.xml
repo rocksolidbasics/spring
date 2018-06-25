@@ -55,6 +55,14 @@
 			<version>${jackson.library}</version>
 		</dependency>
 
+		<!-- Dependency required for HATEOAS support -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.hateoas/spring-hateoas -->
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>0.24.0.RELEASE</version>
+		</dependency>
+
 		<!-- The below dependency is needed when using XML based rest API -->
 		<!-- <dependency> <groupId>javax.xml.bind</groupId> <artifactId>jaxb-api</artifactId> 
 			<version>${jaxb-api.version}</version> <scope>runtime</scope> </dependency> -->
@@ -70,6 +78,14 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.annotation/jsr250-api -->
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>jsr250-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>Rest-Spring</finalName>
